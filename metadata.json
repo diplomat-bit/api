@@ -1,0 +1,6 @@
+{
+  "name": "Workbench Catalog Runner",
+  "description": "Interactive execution engine and development workspace for workbench-catalog.json specifications, supporting API endpoints, data transforms, and workflow execution.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
