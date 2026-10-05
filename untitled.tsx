@@ -10,6 +10,7 @@ import { GeneratedApiExplorer } from './generated/components/GeneratedApiExplore
 import { GeneratedXsdViewer } from './generated/components/GeneratedXsdViewer';
 import { ApiDocumentationPortal } from './src/components/ApiDocumentationPortal';
 import { AllEndpointsHarness } from './src/components/AllEndpointsHarness';
+import { PublicDatabaseHub } from './src/components/PublicDatabaseHub';
 import catalogData from './generated/components/data/workbench-catalog.json';
 
 export interface UntitledWorkbenchProps {
@@ -17,7 +18,7 @@ export interface UntitledWorkbenchProps {
 }
 
 export const UntitledWorkbench: React.FC<UntitledWorkbenchProps> = ({ onOpenSpec }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'one-from-each' | 'docs' | 'explorer' | 'specs' | 'schemas' | 'logs'>('overview');
+  const [activeTab, setActiveTab] = useState<'live-db' | 'overview' | 'one-from-each' | 'docs' | 'explorer' | 'specs' | 'schemas' | 'logs'>('live-db');
   const [activeSpecId, setActiveSpecId] = useState<string>('access-online-transactions-and-orders');
   const [selectedEnvKey, setSelectedEnvKey] = useState<string>('sandbox');
   const [history, setHistory] = useState(workbenchSdk.getHistory());
@@ -66,6 +67,7 @@ export const UntitledWorkbench: React.FC<UntitledWorkbenchProps> = ({ onOpenSpec
           {/* Navigation Tabs */}
           <nav className="flex items-center gap-1">
             {[
+              { id: 'live-db', label: 'Live DB & API 🟢' },
               { id: 'overview', label: 'Catalog Overview' },
               { id: 'one-from-each', label: 'One From Each' },
               { id: 'docs', label: 'API Documentation' },
@@ -110,6 +112,12 @@ export const UntitledWorkbench: React.FC<UntitledWorkbenchProps> = ({ onOpenSpec
 
       {/* Main Body */}
       <div className="flex-1 min-h-0 overflow-hidden">
+        {activeTab === 'live-db' && (
+          <div className="h-full min-h-0 flex flex-col overflow-hidden">
+            <PublicDatabaseHub />
+          </div>
+        )}
+
         {activeTab === 'overview' && (
           <div className="h-full overflow-y-auto p-8 space-y-6">
             {/* Hero Card */}

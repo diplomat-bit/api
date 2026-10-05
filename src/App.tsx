@@ -3,7 +3,7 @@ import {
   Globe, Terminal, Layers, Search, Shield, Play, FileCode, 
   Activity, Sliders, RefreshCw, Upload, Download, Copy, Check,
   ChevronRight, ExternalLink, Sparkles, Filter, Code2, CheckCircle2,
-  BookOpen, Zap
+  BookOpen, Zap, Database
 } from 'lucide-react';
 import { workbenchSdk } from '../generated/configs/api-clients';
 import { DEFAULT_ENVIRONMENTS, getEnvironment } from '../generated/configs/environments';
@@ -16,6 +16,7 @@ import { GeneratedApiExplorer } from '../generated/components/GeneratedApiExplor
 import { GeneratedXsdViewer } from '../generated/components/GeneratedXsdViewer';
 import { ApiDocumentationPortal } from './components/ApiDocumentationPortal';
 import { AllEndpointsHarness } from './components/AllEndpointsHarness';
+import { PublicDatabaseHub } from './components/PublicDatabaseHub';
 import { UntitledWorkbench } from '../untitled';
 
 export default function App() {
@@ -23,8 +24,8 @@ export default function App() {
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [catalogError, setCatalogError] = useState<string | null>(null);
 
-  // Active view: 'docs' | 'one-from-each' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'
-  const [activeTab, setActiveTab] = useState<'docs' | 'one-from-each' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'>('one-from-each');
+  // Active view: 'live-db' | 'one-from-each' | 'docs' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'
+  const [activeTab, setActiveTab] = useState<'live-db' | 'one-from-each' | 'docs' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'>('live-db');
   
   // Selected Spec
   const [selectedSpecId, setSelectedSpecId] = useState<string>('access-online-transactions-and-orders');
@@ -156,6 +157,19 @@ export default function App() {
           {/* Navigation Bar */}
           <nav className="flex items-center gap-1">
             <button
+              onClick={() => setActiveTab('live-db')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                activeTab === 'live-db'
+                  ? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-400'
+                  : 'text-blue-300 hover:text-white hover:bg-blue-950/60 border border-blue-800/60'
+              }`}
+            >
+              <Database className="w-3.5 h-3.5 text-blue-400" />
+              Live DB & Public API
+              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            </button>
+
+            <button
               onClick={() => setActiveTab('one-from-each')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                 activeTab === 'one-from-each'
@@ -285,6 +299,13 @@ export default function App() {
 
       {/* Main Workspace Area */}
       <main className="flex-1 min-h-0 flex overflow-hidden">
+        {/* Live Stretched Database & Public API Hub */}
+        {activeTab === 'live-db' && (
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+            <PublicDatabaseHub />
+          </div>
+        )}
+
         {/* One From Each Endpoint Showcase & Batch Runner */}
         {activeTab === 'one-from-each' && (
           <div className="flex-1 min-h-0">

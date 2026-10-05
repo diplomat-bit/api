@@ -54,12 +54,36 @@
       "fileName": "SpecUI_Access_Online_Transactions_and_Orders.tsx",
       "endpointsCount": 6,
       "endpoints": [
-        {"method": "GET", "path": "/v1/transactions", "summary": "Search transaction history"},
-        {"method": "GET", "path": "/v1/transactions/{transactionId}", "summary": "Retrieve transaction by ID"},
-        {"method": "POST", "path": "/v1/orders/reconcile", "summary": "Submit order reconciliation batch"},
-        {"method": "GET", "path": "/v1/orders/{orderId}/status", "summary": "Check order fulfillment status"},
-        {"method": "POST", "path": "/v1/disputes/inquire", "summary": "Inquire cardholder dispute details"},
-        {"method": "GET", "path": "/v1/settlements/summary", "summary": "Daily batch settlement summary"}
+        {
+          "method": "GET",
+          "path": "/v1/transactions",
+          "summary": "Search transaction history"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/transactions/{transactionId}",
+          "summary": "Retrieve transaction by ID"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/orders/reconcile",
+          "summary": "Submit order reconciliation batch"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/orders/{orderId}/status",
+          "summary": "Check order fulfillment status"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/disputes/inquire",
+          "summary": "Inquire cardholder dispute details"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/settlements/summary",
+          "summary": "Daily batch settlement summary"
+        }
       ]
     },
     {
@@ -71,10 +95,26 @@
       "fileName": "SpecUI_Account_Statements.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "GET", "path": "/v2/statements/accounts/{accountId}", "summary": "Get billing cycles for account"},
-        {"method": "GET", "path": "/v2/statements/{statementId}/pdf", "summary": "Download statement PDF"},
-        {"method": "GET", "path": "/v2/statements/current-balance", "summary": "Get real-time ledger balance"},
-        {"method": "POST", "path": "/v2/statements/delivery-preferences", "summary": "Update statement delivery channel"}
+        {
+          "method": "GET",
+          "path": "/v2/statements/accounts/{accountId}",
+          "summary": "Get billing cycles for account"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/statements/{statementId}/pdf",
+          "summary": "Download statement PDF"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/statements/current-balance",
+          "summary": "Get real-time ledger balance"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/statements/delivery-preferences",
+          "summary": "Update statement delivery channel"
+        }
       ]
     },
     {
@@ -86,14 +126,46 @@
       "fileName": "SpecUI_Accounts_AccountTransactions_FinancialDetails_Digital_Domain_OpenAPI.tsx",
       "endpointsCount": 8,
       "endpoints": [
-        {"method": "GET", "path": "/digital/v3/accounts", "summary": "List linked financial accounts"},
-        {"method": "GET", "path": "/digital/v3/accounts/{accountId}/balances", "summary": "Get ledger and available balances"},
-        {"method": "GET", "path": "/digital/v3/accounts/{accountId}/transactions", "summary": "Get posted and pending transactions"},
-        {"method": "GET", "path": "/digital/v3/accounts/{accountId}/details", "summary": "Get routing, IBAN, and account numbers"},
-        {"method": "POST", "path": "/digital/v3/accounts/sync", "summary": "Trigger instantaneous core bank sync"},
-        {"method": "GET", "path": "/digital/v3/accounts/{accountId}/interest", "summary": "Year-to-date accrued interest"},
-        {"method": "GET", "path": "/digital/v3/accounts/{accountId}/overdraft", "summary": "Overdraft protection limits"},
-        {"method": "POST", "path": "/digital/v3/accounts/categorize", "summary": "Trigger automated transaction tagging"}
+        {
+          "method": "GET",
+          "path": "/digital/v3/accounts",
+          "summary": "List linked financial accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/digital/v3/accounts/{accountId}/balances",
+          "summary": "Get ledger and available balances"
+        },
+        {
+          "method": "GET",
+          "path": "/digital/v3/accounts/{accountId}/transactions",
+          "summary": "Get posted and pending transactions"
+        },
+        {
+          "method": "GET",
+          "path": "/digital/v3/accounts/{accountId}/details",
+          "summary": "Get routing, IBAN, and account numbers"
+        },
+        {
+          "method": "POST",
+          "path": "/digital/v3/accounts/sync",
+          "summary": "Trigger instantaneous core bank sync"
+        },
+        {
+          "method": "GET",
+          "path": "/digital/v3/accounts/{accountId}/interest",
+          "summary": "Year-to-date accrued interest"
+        },
+        {
+          "method": "GET",
+          "path": "/digital/v3/accounts/{accountId}/overdraft",
+          "summary": "Overdraft protection limits"
+        },
+        {
+          "method": "POST",
+          "path": "/digital/v3/accounts/categorize",
+          "summary": "Trigger automated transaction tagging"
+        }
       ]
     },
     {
@@ -105,13 +177,41 @@
       "fileName": "SpecUI_B2B_Virtual_Account_Payment_Method.tsx",
       "endpointsCount": 7,
       "endpoints": [
-        {"method": "POST", "path": "/v1/b2b/accounts/create", "summary": "Issue single-use virtual account"},
-        {"method": "GET", "path": "/v1/b2b/accounts/{accountNumber}/details", "summary": "Query virtual account spend metrics"},
-        {"method": "PUT", "path": "/v1/b2b/accounts/{accountNumber}/spend-limit", "summary": "Update dynamic spend ceiling"},
-        {"method": "POST", "path": "/v1/b2b/accounts/{accountNumber}/cancel", "summary": "Deactivate virtual card number"},
-        {"method": "GET", "path": "/v1/b2b/suppliers/directory", "summary": "Search supplier acceptance directory"},
-        {"method": "POST", "path": "/v1/b2b/remittance/advise", "summary": "Send automated remittance advice to payee"},
-        {"method": "GET", "path": "/v1/b2b/reconciliation/report", "summary": "Retrieve ERP reconciliation matching file"}
+        {
+          "method": "POST",
+          "path": "/v1/b2b/accounts/create",
+          "summary": "Issue single-use virtual account"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/b2b/accounts/{accountNumber}/details",
+          "summary": "Query virtual account spend metrics"
+        },
+        {
+          "method": "PUT",
+          "path": "/v1/b2b/accounts/{accountNumber}/spend-limit",
+          "summary": "Update dynamic spend ceiling"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/b2b/accounts/{accountNumber}/cancel",
+          "summary": "Deactivate virtual card number"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/b2b/suppliers/directory",
+          "summary": "Search supplier acceptance directory"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/b2b/remittance/advise",
+          "summary": "Send automated remittance advice to payee"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/b2b/reconciliation/report",
+          "summary": "Retrieve ERP reconciliation matching file"
+        }
       ]
     },
     {
@@ -123,14 +223,46 @@
       "fileName": "SpecUI_Broker_API.tsx",
       "endpointsCount": 12,
       "endpoints": [
-        {"method": "GET", "path": "/broker/v2/accounts", "summary": "List brokerage accounts"},
-        {"method": "POST", "path": "/broker/v2/orders", "summary": "Place equity or ETF market order"},
-        {"method": "GET", "path": "/broker/v2/orders/{orderId}", "summary": "Get order execution status"},
-        {"method": "DELETE", "path": "/broker/v2/orders/{orderId}", "summary": "Cancel open order"},
-        {"method": "GET", "path": "/broker/v2/positions", "summary": "Get client open positions and cost basis"},
-        {"method": "GET", "path": "/broker/v2/quotes/{symbol}", "summary": "Get real-time level 1 market quote"},
-        {"method": "GET", "path": "/broker/v2/history/trades", "summary": "Historical trade execution blotter"},
-        {"method": "POST", "path": "/broker/v2/transfers/ach", "summary": "Initiate ACH bank deposit to trading balance"}
+        {
+          "method": "GET",
+          "path": "/broker/v2/accounts",
+          "summary": "List brokerage accounts"
+        },
+        {
+          "method": "POST",
+          "path": "/broker/v2/orders",
+          "summary": "Place equity or ETF market order"
+        },
+        {
+          "method": "GET",
+          "path": "/broker/v2/orders/{orderId}",
+          "summary": "Get order execution status"
+        },
+        {
+          "method": "DELETE",
+          "path": "/broker/v2/orders/{orderId}",
+          "summary": "Cancel open order"
+        },
+        {
+          "method": "GET",
+          "path": "/broker/v2/positions",
+          "summary": "Get client open positions and cost basis"
+        },
+        {
+          "method": "GET",
+          "path": "/broker/v2/quotes/{symbol}",
+          "summary": "Get real-time level 1 market quote"
+        },
+        {
+          "method": "GET",
+          "path": "/broker/v2/history/trades",
+          "summary": "Historical trade execution blotter"
+        },
+        {
+          "method": "POST",
+          "path": "/broker/v2/transfers/ach",
+          "summary": "Initiate ACH bank deposit to trading balance"
+        }
       ]
     },
     {
@@ -142,9 +274,21 @@
       "fileName": "SpecUI_Card_on_File_Data_Inquiry.tsx",
       "endpointsCount": 3,
       "endpoints": [
-        {"method": "POST", "path": "/v1/cof/inquire", "summary": "Inquire stored cardholder credential status"},
-        {"method": "GET", "path": "/v1/cof/merchant/{merchantId}/tokens", "summary": "List merchant token credentials"},
-        {"method": "POST", "path": "/v1/cof/update-notification", "summary": "Subscribe to automated card update push"}
+        {
+          "method": "POST",
+          "path": "/v1/cof/inquire",
+          "summary": "Inquire stored cardholder credential status"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/cof/merchant/{merchantId}/tokens",
+          "summary": "List merchant token credentials"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/cof/update-notification",
+          "summary": "Subscribe to automated card update push"
+        }
       ]
     },
     {
@@ -156,10 +300,26 @@
       "fileName": "SpecUI_CardAccountBalanceTransferEligibility_OpenAPI.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/v1/balance-transfer/check-eligibility", "summary": "Check account balance transfer eligibility"},
-        {"method": "POST", "path": "/v1/balance-transfer/simulate-terms", "summary": "Simulate promo APR and monthly schedule"},
-        {"method": "POST", "path": "/v1/balance-transfer/submit", "summary": "Submit transfer request to creditor"},
-        {"method": "GET", "path": "/v1/balance-transfer/{transferId}/status", "summary": "Track transfer settlement status"}
+        {
+          "method": "POST",
+          "path": "/v1/balance-transfer/check-eligibility",
+          "summary": "Check account balance transfer eligibility"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/balance-transfer/simulate-terms",
+          "summary": "Simulate promo APR and monthly schedule"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/balance-transfer/submit",
+          "summary": "Submit transfer request to creditor"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/balance-transfer/{transferId}/status",
+          "summary": "Track transfer settlement status"
+        }
       ]
     },
     {
@@ -171,11 +331,31 @@
       "fileName": "SpecUI_Click_to_Pay.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/v2/src/profile/lookup", "summary": "Lookup consumer Click to Pay profile by email"},
-        {"method": "POST", "path": "/v2/src/checkout/initiate", "summary": "Initiate SRC checkout payload"},
-        {"method": "POST", "path": "/v2/src/tokens/decrypt", "summary": "Decrypt secure card payload for merchant gateway"},
-        {"method": "GET", "path": "/v2/src/cards/enrolled", "summary": "Retrieve masked enrolled card cards list"},
-        {"method": "POST", "path": "/v2/src/checkout/confirm", "summary": "Confirm payment authorization"}
+        {
+          "method": "POST",
+          "path": "/v2/src/profile/lookup",
+          "summary": "Lookup consumer Click to Pay profile by email"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/src/checkout/initiate",
+          "summary": "Initiate SRC checkout payload"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/src/tokens/decrypt",
+          "summary": "Decrypt secure card payload for merchant gateway"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/src/cards/enrolled",
+          "summary": "Retrieve masked enrolled card cards list"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/src/checkout/confirm",
+          "summary": "Confirm payment authorization"
+        }
       ]
     },
     {
@@ -187,10 +367,26 @@
       "fileName": "SpecUI_Consent_Authorization.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/v1/consent/grants", "summary": "Create explicit customer data sharing grant"},
-        {"method": "GET", "path": "/v1/consent/grants/{grantId}", "summary": "Inspect active consent grant status"},
-        {"method": "DELETE", "path": "/v1/consent/grants/{grantId}", "summary": "Revoke consent grant immediately"},
-        {"method": "GET", "path": "/v1/consent/audit-log", "summary": "Retrieve access compliance audit log"}
+        {
+          "method": "POST",
+          "path": "/v1/consent/grants",
+          "summary": "Create explicit customer data sharing grant"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/consent/grants/{grantId}",
+          "summary": "Inspect active consent grant status"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/consent/grants/{grantId}",
+          "summary": "Revoke consent grant immediately"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/consent/audit-log",
+          "summary": "Retrieve access compliance audit log"
+        }
       ]
     },
     {
@@ -202,11 +398,31 @@
       "fileName": "SpecUI_Corporate_Account_Information.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "GET", "path": "/v2/corporate/enterprises/{enterpriseId}", "summary": "Get corporate entity profile"},
-        {"method": "GET", "path": "/v2/corporate/subsidiaries", "summary": "List child entities and departments"},
-        {"method": "GET", "path": "/v2/corporate/credit-lines", "summary": "Query corporate credit facilities and sub-limits"},
-        {"method": "POST", "path": "/v2/corporate/sub-limits/allocate", "summary": "Allocate budget limit to cost center"},
-        {"method": "GET", "path": "/v2/corporate/spend-analysis", "summary": "Executive corporate spend breakdown"}
+        {
+          "method": "GET",
+          "path": "/v2/corporate/enterprises/{enterpriseId}",
+          "summary": "Get corporate entity profile"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/corporate/subsidiaries",
+          "summary": "List child entities and departments"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/corporate/credit-lines",
+          "summary": "Query corporate credit facilities and sub-limits"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/corporate/sub-limits/allocate",
+          "summary": "Allocate budget limit to cost center"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/corporate/spend-analysis",
+          "summary": "Executive corporate spend breakdown"
+        }
       ]
     },
     {
@@ -218,12 +434,36 @@
       "fileName": "SpecUI_Custody.tsx",
       "endpointsCount": 6,
       "endpoints": [
-        {"method": "GET", "path": "/v1/custody/vaults", "summary": "List institutional custody vaults"},
-        {"method": "GET", "path": "/v1/custody/assets/{assetId}", "summary": "Get segregated asset balance & proof of reserves"},
-        {"method": "POST", "path": "/v1/custody/transfers/inbound", "summary": "Generate cold vault deposit address"},
-        {"method": "POST", "path": "/v1/custody/transfers/outbound", "summary": "Initiate multi-sig approval withdrawal"},
-        {"method": "GET", "path": "/v1/custody/approvals/pending", "summary": "List pending policy approval quorums"},
-        {"method": "POST", "path": "/v1/custody/keys/rotate", "summary": "Schedule cryptographic key rotation"}
+        {
+          "method": "GET",
+          "path": "/v1/custody/vaults",
+          "summary": "List institutional custody vaults"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custody/assets/{assetId}",
+          "summary": "Get segregated asset balance & proof of reserves"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custody/transfers/inbound",
+          "summary": "Generate cold vault deposit address"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custody/transfers/outbound",
+          "summary": "Initiate multi-sig approval withdrawal"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/custody/approvals/pending",
+          "summary": "List pending policy approval quorums"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/custody/keys/rotate",
+          "summary": "Schedule cryptographic key rotation"
+        }
       ]
     },
     {
@@ -235,12 +475,36 @@
       "fileName": "SpecUI_Customers_Profiles.tsx",
       "endpointsCount": 6,
       "endpoints": [
-        {"method": "POST", "path": "/v3/customers/create", "summary": "Create verified customer profile"},
-        {"method": "GET", "path": "/v3/customers/{customerId}", "summary": "Retrieve customer demographic record"},
-        {"method": "PUT", "path": "/v3/customers/{customerId}/kyc", "summary": "Submit identity KYC verification documents"},
-        {"method": "GET", "path": "/v3/customers/{customerId}/cards", "summary": "List payment cards issued to customer"},
-        {"method": "POST", "path": "/v3/customers/{customerId}/preferences", "summary": "Update communication and notification preferences"},
-        {"method": "GET", "path": "/v3/customers/sanctions-check", "summary": "Run OFAC / PEP automated screening"}
+        {
+          "method": "POST",
+          "path": "/v3/customers/create",
+          "summary": "Create verified customer profile"
+        },
+        {
+          "method": "GET",
+          "path": "/v3/customers/{customerId}",
+          "summary": "Retrieve customer demographic record"
+        },
+        {
+          "method": "PUT",
+          "path": "/v3/customers/{customerId}/kyc",
+          "summary": "Submit identity KYC verification documents"
+        },
+        {
+          "method": "GET",
+          "path": "/v3/customers/{customerId}/cards",
+          "summary": "List payment cards issued to customer"
+        },
+        {
+          "method": "POST",
+          "path": "/v3/customers/{customerId}/preferences",
+          "summary": "Update communication and notification preferences"
+        },
+        {
+          "method": "GET",
+          "path": "/v3/customers/sanctions-check",
+          "summary": "Run OFAC / PEP automated screening"
+        }
       ]
     },
     {
@@ -252,14 +516,46 @@
       "fileName": "SpecUI_DPS_Card_and_Account_Services.tsx",
       "endpointsCount": 9,
       "endpoints": [
-        {"method": "POST", "path": "/dps/v4/cards/activate", "summary": "Activate physical debit card"},
-        {"method": "PUT", "path": "/dps/v4/cards/{cardId}/status", "summary": "Update card block status (Lost/Stolen/Frozen)"},
-        {"method": "POST", "path": "/dps/v4/cards/{cardId}/pin/set", "summary": "Set or reset card encrypted PIN"},
-        {"method": "GET", "path": "/dps/v4/cards/{cardId}/velocity-limits", "summary": "Query daily ATM and POS spend caps"},
-        {"method": "PUT", "path": "/dps/v4/cards/{cardId}/velocity-limits", "summary": "Adjust dynamic transaction limits"},
-        {"method": "POST", "path": "/dps/v4/cards/reissue", "summary": "Order replacement card"},
-        {"method": "GET", "path": "/dps/v4/authorizations/real-time", "summary": "Live authorization stream query"},
-        {"method": "POST", "path": "/dps/v4/stand-in/rules", "summary": "Configure STIP stand-in fallback logic"}
+        {
+          "method": "POST",
+          "path": "/dps/v4/cards/activate",
+          "summary": "Activate physical debit card"
+        },
+        {
+          "method": "PUT",
+          "path": "/dps/v4/cards/{cardId}/status",
+          "summary": "Update card block status (Lost/Stolen/Frozen)"
+        },
+        {
+          "method": "POST",
+          "path": "/dps/v4/cards/{cardId}/pin/set",
+          "summary": "Set or reset card encrypted PIN"
+        },
+        {
+          "method": "GET",
+          "path": "/dps/v4/cards/{cardId}/velocity-limits",
+          "summary": "Query daily ATM and POS spend caps"
+        },
+        {
+          "method": "PUT",
+          "path": "/dps/v4/cards/{cardId}/velocity-limits",
+          "summary": "Adjust dynamic transaction limits"
+        },
+        {
+          "method": "POST",
+          "path": "/dps/v4/cards/reissue",
+          "summary": "Order replacement card"
+        },
+        {
+          "method": "GET",
+          "path": "/dps/v4/authorizations/real-time",
+          "summary": "Live authorization stream query"
+        },
+        {
+          "method": "POST",
+          "path": "/dps/v4/stand-in/rules",
+          "summary": "Configure STIP stand-in fallback logic"
+        }
       ]
     },
     {
@@ -271,13 +567,41 @@
       "fileName": "SpecUI_Finicity_API.tsx",
       "endpointsCount": 11,
       "endpoints": [
-        {"method": "POST", "path": "/aggregation/v1/customers", "summary": "Enroll Finicity consumer"},
-        {"method": "GET", "path": "/aggregation/v1/institutions", "summary": "Search financial institutions directory"},
-        {"method": "POST", "path": "/aggregation/v1/connect/url", "summary": "Generate Finicity Connect webview URL"},
-        {"method": "GET", "path": "/aggregation/v1/customers/{customerId}/accounts", "summary": "Retrieve consumer aggregated accounts"},
-        {"method": "GET", "path": "/aggregation/v1/customers/{customerId}/transactions", "summary": "Download verified bank statement transactions"},
-        {"method": "POST", "path": "/decisioning/v2/reports/voa", "summary": "Generate Verification of Assets (VOA) report"},
-        {"method": "POST", "path": "/decisioning/v2/reports/voi", "summary": "Generate Verification of Income (VOI) report"}
+        {
+          "method": "POST",
+          "path": "/aggregation/v1/customers",
+          "summary": "Enroll Finicity consumer"
+        },
+        {
+          "method": "GET",
+          "path": "/aggregation/v1/institutions",
+          "summary": "Search financial institutions directory"
+        },
+        {
+          "method": "POST",
+          "path": "/aggregation/v1/connect/url",
+          "summary": "Generate Finicity Connect webview URL"
+        },
+        {
+          "method": "GET",
+          "path": "/aggregation/v1/customers/{customerId}/accounts",
+          "summary": "Retrieve consumer aggregated accounts"
+        },
+        {
+          "method": "GET",
+          "path": "/aggregation/v1/customers/{customerId}/transactions",
+          "summary": "Download verified bank statement transactions"
+        },
+        {
+          "method": "POST",
+          "path": "/decisioning/v2/reports/voa",
+          "summary": "Generate Verification of Assets (VOA) report"
+        },
+        {
+          "method": "POST",
+          "path": "/decisioning/v2/reports/voi",
+          "summary": "Generate Verification of Income (VOI) report"
+        }
       ]
     },
     {
@@ -289,10 +613,26 @@
       "fileName": "SpecUI_Foreign_Exchange_Rates.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "GET", "path": "/v1/forex/rates/latest", "summary": "Get latest interbank FX quotes"},
-        {"method": "POST", "path": "/v1/forex/quotes/guaranteed", "summary": "Lock in guaranteed cross-border rate for 15 mins"},
-        {"method": "GET", "path": "/v1/forex/pairs/{pair}/history", "summary": "Historical daily FX settlement rates"},
-        {"method": "POST", "path": "/v1/forex/contracts/execute", "summary": "Execute FX forward or spot contract"}
+        {
+          "method": "GET",
+          "path": "/v1/forex/rates/latest",
+          "summary": "Get latest interbank FX quotes"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/forex/quotes/guaranteed",
+          "summary": "Lock in guaranteed cross-border rate for 15 mins"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/forex/pairs/{pair}/history",
+          "summary": "Historical daily FX settlement rates"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/forex/contracts/execute",
+          "summary": "Execute FX forward or spot contract"
+        }
       ]
     },
     {
@@ -304,11 +644,31 @@
       "fileName": "SpecUI_IAM_TokenManagement_PartnerOauth2AuthorizationCodeManagement_Digital_Domain_OpenAPI.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/oauth2/v2/token", "summary": "Mint partner OAuth2 Bearer token"},
-        {"method": "POST", "path": "/oauth2/v2/authorize/code", "summary": "PKCE authorization code redemption"},
-        {"method": "POST", "path": "/oauth2/v2/revoke", "summary": "Revoke active token pair"},
-        {"method": "POST", "path": "/oauth2/v2/introspect", "summary": "RFC 7662 token introspection"},
-        {"method": "GET", "path": "/oauth2/v2/certs", "summary": "JSON Web Key Set (JWKS) public keys"}
+        {
+          "method": "POST",
+          "path": "/oauth2/v2/token",
+          "summary": "Mint partner OAuth2 Bearer token"
+        },
+        {
+          "method": "POST",
+          "path": "/oauth2/v2/authorize/code",
+          "summary": "PKCE authorization code redemption"
+        },
+        {
+          "method": "POST",
+          "path": "/oauth2/v2/revoke",
+          "summary": "Revoke active token pair"
+        },
+        {
+          "method": "POST",
+          "path": "/oauth2/v2/introspect",
+          "summary": "RFC 7662 token introspection"
+        },
+        {
+          "method": "GET",
+          "path": "/oauth2/v2/certs",
+          "summary": "JSON Web Key Set (JWKS) public keys"
+        }
       ]
     },
     {
@@ -320,9 +680,21 @@
       "fileName": "SpecUI_Incoming_webhooks.tsx",
       "endpointsCount": 3,
       "endpoints": [
-        {"method": "POST", "path": "/webhooks/v1/endpoints", "summary": "Register webhook listener URL"},
-        {"method": "GET", "path": "/webhooks/v1/deliveries/failed", "summary": "List failed events and retry triggers"},
-        {"method": "POST", "path": "/webhooks/v1/test-event", "summary": "Dispatch simulated sample event payload"}
+        {
+          "method": "POST",
+          "path": "/webhooks/v1/endpoints",
+          "summary": "Register webhook listener URL"
+        },
+        {
+          "method": "GET",
+          "path": "/webhooks/v1/deliveries/failed",
+          "summary": "List failed events and retry triggers"
+        },
+        {
+          "method": "POST",
+          "path": "/webhooks/v1/test-event",
+          "summary": "Dispatch simulated sample event payload"
+        }
       ]
     },
     {
@@ -334,11 +706,31 @@
       "fileName": "SpecUI_Kernel_in_the_Cloud.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/kernel/v1/sessions/initiate", "summary": "Initiate cloud terminal kernel session"},
-        {"method": "POST", "path": "/kernel/v1/emv/process-apdu", "summary": "Process EMV chip APDU command script"},
-        {"method": "POST", "path": "/kernel/v1/nfc/contactless-read", "summary": "Process contactless NFC tag payload"},
-        {"method": "GET", "path": "/kernel/v1/terminals/{terminalId}/health", "summary": "Check POS terminal attestation & key state"},
-        {"method": "POST", "path": "/kernel/v1/certificates/inject", "summary": "Inject CA public key certificate"}
+        {
+          "method": "POST",
+          "path": "/kernel/v1/sessions/initiate",
+          "summary": "Initiate cloud terminal kernel session"
+        },
+        {
+          "method": "POST",
+          "path": "/kernel/v1/emv/process-apdu",
+          "summary": "Process EMV chip APDU command script"
+        },
+        {
+          "method": "POST",
+          "path": "/kernel/v1/nfc/contactless-read",
+          "summary": "Process contactless NFC tag payload"
+        },
+        {
+          "method": "GET",
+          "path": "/kernel/v1/terminals/{terminalId}/health",
+          "summary": "Check POS terminal attestation & key state"
+        },
+        {
+          "method": "POST",
+          "path": "/kernel/v1/certificates/inject",
+          "summary": "Inject CA public key certificate"
+        }
       ]
     },
     {
@@ -350,11 +742,31 @@
       "fileName": "SpecUI_PayPal_APIs.tsx",
       "endpointsCount": 8,
       "endpoints": [
-        {"method": "POST", "path": "/v2/checkout/orders", "summary": "Create PayPal wallet order"},
-        {"method": "POST", "path": "/v2/checkout/orders/{orderId}/capture", "summary": "Capture authorized payment"},
-        {"method": "POST", "path": "/v2/payments/captures/{captureId}/refund", "summary": "Issue partial or full refund"},
-        {"method": "GET", "path": "/v2/checkout/orders/{orderId}", "summary": "Inspect order details and shipping"},
-        {"method": "POST", "path": "/v1/payments/payouts", "summary": "Send batch payouts to multiple recipients"}
+        {
+          "method": "POST",
+          "path": "/v2/checkout/orders",
+          "summary": "Create PayPal wallet order"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/checkout/orders/{orderId}/capture",
+          "summary": "Capture authorized payment"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/payments/captures/{captureId}/refund",
+          "summary": "Issue partial or full refund"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/checkout/orders/{orderId}",
+          "summary": "Inspect order details and shipping"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/payments/payouts",
+          "summary": "Send batch payouts to multiple recipients"
+        }
       ]
     },
     {
@@ -366,10 +778,26 @@
       "fileName": "SpecUI_RewardLinkageShopWithPoints_OpenAPI.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/v1/rewards/link", "summary": "Link reward program to card account"},
-        {"method": "GET", "path": "/v1/rewards/balance", "summary": "Get spendable points balance & conversion value"},
-        {"method": "POST", "path": "/v1/rewards/quote", "summary": "Quote point redemption rate for merchant cart"},
-        {"method": "DELETE", "path": "/v1/rewards/unlink", "summary": "Unlink merchant loyalty program"}
+        {
+          "method": "POST",
+          "path": "/v1/rewards/link",
+          "summary": "Link reward program to card account"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/rewards/balance",
+          "summary": "Get spendable points balance & conversion value"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/rewards/quote",
+          "summary": "Quote point redemption rate for merchant cart"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/rewards/unlink",
+          "summary": "Unlink merchant loyalty program"
+        }
       ]
     },
     {
@@ -381,10 +809,26 @@
       "fileName": "SpecUI_RewardRedemptionSelectAndCredit_OpenAPI.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/v1/redemptions/statement-credit", "summary": "Redeem points for statement credit"},
-        {"method": "POST", "path": "/v1/redemptions/cashback", "summary": "Disburse cash back to checking account"},
-        {"method": "GET", "path": "/v1/redemptions/history", "summary": "Query past redemption transaction logs"},
-        {"method": "POST", "path": "/v1/redemptions/cancel", "summary": "Cancel pending unposted redemption"}
+        {
+          "method": "POST",
+          "path": "/v1/redemptions/statement-credit",
+          "summary": "Redeem points for statement credit"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/redemptions/cashback",
+          "summary": "Disburse cash back to checking account"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/redemptions/history",
+          "summary": "Query past redemption transaction logs"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/redemptions/cancel",
+          "summary": "Cancel pending unposted redemption"
+        }
       ]
     },
     {
@@ -396,10 +840,26 @@
       "fileName": "SpecUI_SecurityE2EKeyExchangePreLogin_Partner_OpenAPI.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/security/v2/key-exchange/initiate", "summary": "Initiate ECDH Diffie-Hellman handshake"},
-        {"method": "POST", "path": "/security/v2/key-exchange/finalize", "summary": "Finalize shared secret and session token"},
-        {"method": "POST", "path": "/security/v2/payload/encrypt", "summary": "Encrypt sensitive cardholder fields"},
-        {"method": "POST", "path": "/security/v2/session/validate", "summary": "Validate cryptographic session heartbeat"}
+        {
+          "method": "POST",
+          "path": "/security/v2/key-exchange/initiate",
+          "summary": "Initiate ECDH Diffie-Hellman handshake"
+        },
+        {
+          "method": "POST",
+          "path": "/security/v2/key-exchange/finalize",
+          "summary": "Finalize shared secret and session token"
+        },
+        {
+          "method": "POST",
+          "path": "/security/v2/payload/encrypt",
+          "summary": "Encrypt sensitive cardholder fields"
+        },
+        {
+          "method": "POST",
+          "path": "/security/v2/session/validate",
+          "summary": "Validate cryptographic session heartbeat"
+        }
       ]
     },
     {
@@ -411,10 +871,26 @@
       "fileName": "SpecUI_TaxStatement_Digital_Orchestation.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/v1/taxes/1099/generate", "summary": "Generate IRS 1099-K electronic statement"},
-        {"method": "GET", "path": "/v1/taxes/documents/{documentId}", "summary": "Download encrypted PDF tax slip"},
-        {"method": "POST", "path": "/v1/taxes/w8ben/submit", "summary": "Submit foreign entity W-8BEN withholding certification"},
-        {"method": "GET", "path": "/v1/taxes/withholding/summary", "summary": "Annual withholding tax ledger breakdown"}
+        {
+          "method": "POST",
+          "path": "/v1/taxes/1099/generate",
+          "summary": "Generate IRS 1099-K electronic statement"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/taxes/documents/{documentId}",
+          "summary": "Download encrypted PDF tax slip"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/taxes/w8ben/submit",
+          "summary": "Submit foreign entity W-8BEN withholding certification"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/taxes/withholding/summary",
+          "summary": "Annual withholding tax ledger breakdown"
+        }
       ]
     },
     {
@@ -426,11 +902,31 @@
       "fileName": "SpecUI_Token_Authorization.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/v3/tokens/authorize", "summary": "Authorize digital wallet payment token"},
-        {"method": "POST", "path": "/v3/tokens/cryptogram/verify", "summary": "Verify 3DS / TAVV cryptographic payload"},
-        {"method": "GET", "path": "/v3/tokens/{tokenReferenceId}/status", "summary": "Query VTS token status and PAN lifecycle"},
-        {"method": "POST", "path": "/v3/tokens/{tokenReferenceId}/suspend", "summary": "Suspend token immediately"},
-        {"method": "POST", "path": "/v3/tokens/{tokenReferenceId}/resume", "summary": "Resume suspended token"}
+        {
+          "method": "POST",
+          "path": "/v3/tokens/authorize",
+          "summary": "Authorize digital wallet payment token"
+        },
+        {
+          "method": "POST",
+          "path": "/v3/tokens/cryptogram/verify",
+          "summary": "Verify 3DS / TAVV cryptographic payload"
+        },
+        {
+          "method": "GET",
+          "path": "/v3/tokens/{tokenReferenceId}/status",
+          "summary": "Query VTS token status and PAN lifecycle"
+        },
+        {
+          "method": "POST",
+          "path": "/v3/tokens/{tokenReferenceId}/suspend",
+          "summary": "Suspend token immediately"
+        },
+        {
+          "method": "POST",
+          "path": "/v3/tokens/{tokenReferenceId}/resume",
+          "summary": "Resume suspended token"
+        }
       ]
     },
     {
@@ -442,11 +938,31 @@
       "fileName": "SpecUI_Virtual_Card_Payments.tsx",
       "endpointsCount": 6,
       "endpoints": [
-        {"method": "POST", "path": "/v2/virtual-cards/issue", "summary": "Generate single or multi-use virtual card"},
-        {"method": "GET", "path": "/v2/virtual-cards/{cardId}", "summary": "Get masked card number, CVV, and expiration"},
-        {"method": "PUT", "path": "/v2/virtual-cards/{cardId}/controls", "summary": "Set Merchant Category Code (MCC) filters"},
-        {"method": "POST", "path": "/v2/virtual-cards/{cardId}/cancel", "summary": "Cancel virtual card upon invoice match"},
-        {"method": "GET", "path": "/v2/virtual-cards/transactions", "summary": "Search transactions across all virtual cards"}
+        {
+          "method": "POST",
+          "path": "/v2/virtual-cards/issue",
+          "summary": "Generate single or multi-use virtual card"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/virtual-cards/{cardId}",
+          "summary": "Get masked card number, CVV, and expiration"
+        },
+        {
+          "method": "PUT",
+          "path": "/v2/virtual-cards/{cardId}/controls",
+          "summary": "Set Merchant Category Code (MCC) filters"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/virtual-cards/{cardId}/cancel",
+          "summary": "Cancel virtual card upon invoice match"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/virtual-cards/transactions",
+          "summary": "Search transactions across all virtual cards"
+        }
       ]
     },
     {
@@ -458,10 +974,26 @@
       "fileName": "SpecUI_Visa_Accounts_Receivable_Manager.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/v1/arm/invoices/upload", "summary": "Upload enterprise ERP invoice batch"},
-        {"method": "GET", "path": "/v1/arm/invoices/{invoiceId}/status", "summary": "Check matching and settlement status"},
-        {"method": "POST", "path": "/v1/arm/remittance/match", "summary": "Trigger automated machine learning invoice reconciliation"},
-        {"method": "GET", "path": "/v1/arm/discrepancies", "summary": "List payment underpayment / overpayment exceptions"}
+        {
+          "method": "POST",
+          "path": "/v1/arm/invoices/upload",
+          "summary": "Upload enterprise ERP invoice batch"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/arm/invoices/{invoiceId}/status",
+          "summary": "Check matching and settlement status"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/arm/remittance/match",
+          "summary": "Trigger automated machine learning invoice reconciliation"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/arm/discrepancies",
+          "summary": "List payment underpayment / overpayment exceptions"
+        }
       ]
     },
     {
@@ -473,10 +1005,26 @@
       "fileName": "SpecUI_Visa_BIN_Attribute_Sharing_Service.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/v2/bin/inquire", "summary": "Inquire 6-digit or 8-digit BIN table metadata"},
-        {"method": "GET", "path": "/v2/bin/ranges/{binNumber}", "summary": "Get card brand, product code, issuing bank, country"},
-        {"method": "GET", "path": "/v2/bin/routing/fast-path", "summary": "Identify low-cost domestic routing eligibility"},
-        {"method": "GET", "path": "/v2/bin/commercial-indicator", "summary": "Check if card is Corporate, Fleet, or Purchasing"}
+        {
+          "method": "POST",
+          "path": "/v2/bin/inquire",
+          "summary": "Inquire 6-digit or 8-digit BIN table metadata"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/bin/ranges/{binNumber}",
+          "summary": "Get card brand, product code, issuing bank, country"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/bin/routing/fast-path",
+          "summary": "Identify low-cost domestic routing eligibility"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/bin/commercial-indicator",
+          "summary": "Check if card is Corporate, Fleet, or Purchasing"
+        }
       ]
     },
     {
@@ -488,11 +1036,31 @@
       "fileName": "SpecUI_Visa_Card_Program_Management.tsx",
       "endpointsCount": 7,
       "endpoints": [
-        {"method": "GET", "path": "/v3/programs", "summary": "List active card programs"},
-        {"method": "POST", "path": "/v3/programs/create", "summary": "Configure new card product definition"},
-        {"method": "PUT", "path": "/v3/programs/{programId}/limits", "summary": "Update default daily authorization caps"},
-        {"method": "POST", "path": "/v3/programs/{programId}/art-profiles", "summary": "Upload digital wallet card artwork asset"},
-        {"method": "GET", "path": "/v3/programs/{programId}/metrics", "summary": "Query cardholder activation and interchange revenue"}
+        {
+          "method": "GET",
+          "path": "/v3/programs",
+          "summary": "List active card programs"
+        },
+        {
+          "method": "POST",
+          "path": "/v3/programs/create",
+          "summary": "Configure new card product definition"
+        },
+        {
+          "method": "PUT",
+          "path": "/v3/programs/{programId}/limits",
+          "summary": "Update default daily authorization caps"
+        },
+        {
+          "method": "POST",
+          "path": "/v3/programs/{programId}/art-profiles",
+          "summary": "Upload digital wallet card artwork asset"
+        },
+        {
+          "method": "GET",
+          "path": "/v3/programs/{programId}/metrics",
+          "summary": "Query cardholder activation and interchange revenue"
+        }
       ]
     },
     {
@@ -504,10 +1072,26 @@
       "fileName": "SpecUI_Visa_Consumer_Authentication_Service.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/v2/vcas/auth-request", "summary": "Submit 3-D Secure 2.2 authentication request"},
-        {"method": "POST", "path": "/v2/vcas/challenge/result", "summary": "Resolve cardholder OTP or biometric challenge"},
-        {"method": "GET", "path": "/v2/vcas/risk-score/{transactionId}", "summary": "Retrieve machine learning risk evaluation score"},
-        {"method": "POST", "path": "/v2/vcas/exemptions/request", "summary": "Request PSD2 Low-Value or Tra Transaction Risk Exemption"}
+        {
+          "method": "POST",
+          "path": "/v2/vcas/auth-request",
+          "summary": "Submit 3-D Secure 2.2 authentication request"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/vcas/challenge/result",
+          "summary": "Resolve cardholder OTP or biometric challenge"
+        },
+        {
+          "method": "GET",
+          "path": "/v2/vcas/risk-score/{transactionId}",
+          "summary": "Retrieve machine learning risk evaluation score"
+        },
+        {
+          "method": "POST",
+          "path": "/v2/vcas/exemptions/request",
+          "summary": "Request PSD2 Low-Value or Tra Transaction Risk Exemption"
+        }
       ]
     },
     {
@@ -519,10 +1103,26 @@
       "fileName": "SpecUI_Visa_Credit_Card_Application.tsx",
       "endpointsCount": 5,
       "endpoints": [
-        {"method": "POST", "path": "/v1/applications/submit", "summary": "Submit digital credit card application"},
-        {"method": "GET", "path": "/v1/applications/{applicationId}/status", "summary": "Query real-time automated underwriting decision"},
-        {"method": "POST", "path": "/v1/applications/{applicationId}/accept-terms", "summary": "Record cardholder electronic disclosures consent"},
-        {"method": "POST", "path": "/v1/applications/{applicationId}/instant-issue", "summary": "Provision instant digital card to Apple/Google Pay"}
+        {
+          "method": "POST",
+          "path": "/v1/applications/submit",
+          "summary": "Submit digital credit card application"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/applications/{applicationId}/status",
+          "summary": "Query real-time automated underwriting decision"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/applications/{applicationId}/accept-terms",
+          "summary": "Record cardholder electronic disclosures consent"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/applications/{applicationId}/instant-issue",
+          "summary": "Provision instant digital card to Apple/Google Pay"
+        }
       ]
     },
     {
@@ -534,9 +1134,21 @@
       "fileName": "SpecUI_Visa_DCVV2_Generate.tsx",
       "endpointsCount": 3,
       "endpoints": [
-        {"method": "POST", "path": "/v1/dcvv2/generate", "summary": "Generate dynamic CVV2 security code"},
-        {"method": "POST", "path": "/v1/dcvv2/verify", "summary": "Verify incoming merchant dynamic CVV2"},
-        {"method": "GET", "path": "/v1/dcvv2/keys/{keyId}", "summary": "Check HSM symmetric encryption key status"}
+        {
+          "method": "POST",
+          "path": "/v1/dcvv2/generate",
+          "summary": "Generate dynamic CVV2 security code"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/dcvv2/verify",
+          "summary": "Verify incoming merchant dynamic CVV2"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/dcvv2/keys/{keyId}",
+          "summary": "Check HSM symmetric encryption key status"
+        }
       ]
     },
     {
@@ -548,9 +1160,21 @@
       "fileName": "SpecUI_Visa_Direct_Connect.tsx",
       "endpointsCount": 6,
       "endpoints": [
-        {"method": "POST", "path": "/direct-connect/v2/funds-transfer", "summary": "High-throughput funds disbursement"},
-        {"method": "POST", "path": "/direct-connect/v2/network-query", "summary": "Low-latency network gateway query"},
-        {"method": "GET", "path": "/direct-connect/v2/routes/health", "summary": "Direct data center gateway ping and latency metrics"}
+        {
+          "method": "POST",
+          "path": "/direct-connect/v2/funds-transfer",
+          "summary": "High-throughput funds disbursement"
+        },
+        {
+          "method": "POST",
+          "path": "/direct-connect/v2/network-query",
+          "summary": "Low-latency network gateway query"
+        },
+        {
+          "method": "GET",
+          "path": "/direct-connect/v2/routes/health",
+          "summary": "Direct data center gateway ping and latency metrics"
+        }
       ]
     },
     {
@@ -562,11 +1186,31 @@
       "fileName": "SpecUI_Visa_Direct.tsx",
       "endpointsCount": 9,
       "endpoints": [
-        {"method": "POST", "path": "/visadirect/v3/push-funds", "summary": "Push Funds Original Credit Transaction (OCT)"},
-        {"method": "POST", "path": "/visadirect/v3/pull-funds", "summary": "Pull Funds Account Funding Transaction (AFT)"},
-        {"method": "POST", "path": "/visadirect/v3/card-query", "summary": "Query cardholder recipient fast-funds capability"},
-        {"method": "POST", "path": "/visadirect/v3/cross-border/quote", "summary": "Obtain real-time cross-border exchange fee quote"},
-        {"method": "GET", "path": "/visadirect/v3/transactions/{transactionId}", "summary": "Track real-time disbursement settlement status"}
+        {
+          "method": "POST",
+          "path": "/visadirect/v3/push-funds",
+          "summary": "Push Funds Original Credit Transaction (OCT)"
+        },
+        {
+          "method": "POST",
+          "path": "/visadirect/v3/pull-funds",
+          "summary": "Pull Funds Account Funding Transaction (AFT)"
+        },
+        {
+          "method": "POST",
+          "path": "/visadirect/v3/card-query",
+          "summary": "Query cardholder recipient fast-funds capability"
+        },
+        {
+          "method": "POST",
+          "path": "/visadirect/v3/cross-border/quote",
+          "summary": "Obtain real-time cross-border exchange fee quote"
+        },
+        {
+          "method": "GET",
+          "path": "/visadirect/v3/transactions/{transactionId}",
+          "summary": "Track real-time disbursement settlement status"
+        }
       ]
     },
     {
@@ -578,10 +1222,26 @@
       "fileName": "SpecUI_Visa_Pay.tsx",
       "endpointsCount": 6,
       "endpoints": [
-        {"method": "POST", "path": "/v1/pay/qr/generate", "summary": "Generate EMVCo dynamic payment QR code"},
-        {"method": "POST", "path": "/v1/pay/qr/scan-and-pay", "summary": "Authorize push payment against merchant QR"},
-        {"method": "POST", "path": "/v1/pay/aliases/resolve", "summary": "Resolve mobile phone / national ID alias to PAN"},
-        {"method": "GET", "path": "/v1/pay/notifications/status", "summary": "Push notification dispatch status"}
+        {
+          "method": "POST",
+          "path": "/v1/pay/qr/generate",
+          "summary": "Generate EMVCo dynamic payment QR code"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/pay/qr/scan-and-pay",
+          "summary": "Authorize push payment against merchant QR"
+        },
+        {
+          "method": "POST",
+          "path": "/v1/pay/aliases/resolve",
+          "summary": "Resolve mobile phone / national ID alias to PAN"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/pay/notifications/status",
+          "summary": "Push notification dispatch status"
+        }
       ]
     },
     {
@@ -593,10 +1253,26 @@
       "fileName": "SpecUI_Visa_Payment_Passkey.tsx",
       "endpointsCount": 4,
       "endpoints": [
-        {"method": "POST", "path": "/passkey/v1/registration/options", "summary": "Request WebAuthn registration challenge"},
-        {"method": "POST", "path": "/passkey/v1/registration/verify", "summary": "Verify public key credential & bind to card"},
-        {"method": "POST", "path": "/passkey/v1/assertion/options", "summary": "Request biometric login challenge"},
-        {"method": "POST", "path": "/passkey/v1/assertion/verify", "summary": "Verify biometric signature for zero-friction auth"}
+        {
+          "method": "POST",
+          "path": "/passkey/v1/registration/options",
+          "summary": "Request WebAuthn registration challenge"
+        },
+        {
+          "method": "POST",
+          "path": "/passkey/v1/registration/verify",
+          "summary": "Verify public key credential & bind to card"
+        },
+        {
+          "method": "POST",
+          "path": "/passkey/v1/assertion/options",
+          "summary": "Request biometric login challenge"
+        },
+        {
+          "method": "POST",
+          "path": "/passkey/v1/assertion/verify",
+          "summary": "Verify biometric signature for zero-friction auth"
+        }
       ]
     },
     {
@@ -608,9 +1284,21 @@
       "fileName": "SpecUI_Visa_Travel_Notification_Service.tsx",
       "endpointsCount": 3,
       "endpoints": [
-        {"method": "POST", "path": "/v1/travel/itineraries", "summary": "Register cardholder international travel itinerary"},
-        {"method": "GET", "path": "/v1/travel/itineraries/active", "summary": "List active travel exemptions for cardholder"},
-        {"method": "DELETE", "path": "/v1/travel/itineraries/{itineraryId}", "summary": "Cancel registered travel plan"}
+        {
+          "method": "POST",
+          "path": "/v1/travel/itineraries",
+          "summary": "Register cardholder international travel itinerary"
+        },
+        {
+          "method": "GET",
+          "path": "/v1/travel/itineraries/active",
+          "summary": "List active travel exemptions for cardholder"
+        },
+        {
+          "method": "DELETE",
+          "path": "/v1/travel/itineraries/{itineraryId}",
+          "summary": "Cancel registered travel plan"
+        }
       ]
     },
     {
@@ -622,10 +1310,26 @@
       "fileName": "SpecUI_VisaNet_Connect_Issuing.tsx",
       "endpointsCount": 8,
       "endpoints": [
-        {"method": "POST", "path": "/visanet/v2/dual-message/authorize", "summary": "Dual-message 0100 authorization message"},
-        {"method": "POST", "path": "/visanet/v2/clearing/submit", "summary": "0200 clearing & settlement capture"},
-        {"method": "POST", "path": "/visanet/v2/reversals", "summary": "0400 transaction reversal and advice"},
-        {"method": "GET", "path": "/visanet/v2/interchange/qualification", "summary": "Determine fee program qualification code"}
+        {
+          "method": "POST",
+          "path": "/visanet/v2/dual-message/authorize",
+          "summary": "Dual-message 0100 authorization message"
+        },
+        {
+          "method": "POST",
+          "path": "/visanet/v2/clearing/submit",
+          "summary": "0200 clearing & settlement capture"
+        },
+        {
+          "method": "POST",
+          "path": "/visanet/v2/reversals",
+          "summary": "0400 transaction reversal and advice"
+        },
+        {
+          "method": "GET",
+          "path": "/visanet/v2/interchange/qualification",
+          "summary": "Determine fee program qualification code"
+        }
       ]
     },
     {

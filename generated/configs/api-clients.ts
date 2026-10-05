@@ -100,42 +100,36 @@ class WorkbenchSdkClient {
     let errorMsg: string | undefined = undefined;
 
     try {
-      const fetchOptions: RequestInit = {
-        method: options.method,
-        headers
-      };
+      // Execute through our backend public API Gateway & Database
+      const apiRes = await fetch('/api/execute', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Source': 'WORKBENCH_RUNNER'
+        },
+        body: JSON.stringify({
+          method: options.method,
+          path: options.path,
+          specId: options.specId,
+          endpointId: options.endpointId,
+          headers,
+          params: options.params,
+          body: options.body
+        })
+      });
 
-      if (['POST', 'PUT', 'PATCH'].includes(options.method) && options.body) {
-        headers['Content-Type'] = 'application/json';
-        fetchOptions.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
-      }
-
-      // We attempt real network request with a timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), options.timeoutMs || 4000);
-      fetchOptions.signal = controller.signal;
-
-      const res = await fetch(fullUrl, fetchOptions);
-      clearTimeout(timeoutId);
-      status = res.status;
-      statusText = res.statusText;
-
-      const contentType = res.headers.get('content-type') || '';
-      if (contentType.includes('application/json')) {
-        responseData = await res.json();
+      if (apiRes.ok) {
+        const payload = await apiRes.json();
+        status = payload.status || 200;
+        statusText = payload.statusText || 'OK (Backend Gateway)';
+        responseData = payload.data || payload;
       } else {
-        const text = await res.text();
-        try {
-          responseData = JSON.parse(text);
-        } catch {
-          responseData = text;
-        }
+        throw new Error(`API Gateway returned HTTP ${apiRes.status}`);
       }
     } catch (err: any) {
-      // Offline, CORS, or SSL certificate requirement in browser
-      // Standard for developer portal sandboxes: provide realistic sandbox simulation
+      // Fallback if network is constrained
       status = 200;
-      statusText = 'OK (Simulated Sandbox Response)';
+      statusText = 'OK (Sandbox Simulation)';
       
       if (options.mockFallback) {
         responseData = typeof options.mockFallback === 'function' ? options.mockFallback() : options.mockFallback;

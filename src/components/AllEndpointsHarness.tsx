@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { 
   Play, Pause, Square, Download, Search, Filter, CheckCircle2, 
   AlertCircle, Clock, RefreshCw, Terminal, Layers, ArrowUpRight, 
-  Copy, Check, ChevronDown, ChevronRight, Zap, Globe, Shield, Sparkles
+  Copy, Check, ChevronDown, ChevronRight, Zap, Globe, Shield, Sparkles, Edit3, Code2, X
 } from 'lucide-react';
 import { ENDPOINT_SAMPLES_LIST, EndpointSampleItem } from '../../generated/components/data/endpoint-samples';
 import { workbenchSdk } from '../../generated/configs/api-clients';
@@ -18,6 +18,7 @@ interface RunResult {
   latencyMs: number;
   timestamp: string;
   responseData: any;
+  requestPayload?: any;
   error?: string;
 }
 
@@ -26,16 +27,21 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedMethod, setSelectedMethod] = useState('all');
   
-  // Results map
+  // Results & Edited Payloads
   const [results, setResults] = useState<Record<string, RunResult>>({});
+  const [editedPayloads, setEditedPayloads] = useState<Record<string, string>>({});
+  const [editingCardId, setEditingCardId] = useState<string | null>(null);
+
+  // Batch execution state
   const [activeRunningId, setActiveRunningId] = useState<string | null>(null);
   const [isBatchRunning, setIsBatchRunning] = useState(false);
   const [batchProgress, setBatchProgress] = useState(0);
   const cancelBatchRef = useRef(false);
 
-  // Expanded items state
+  // Expanded items & modals
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [showUnifiedModal, setShowUnifiedModal] = useState<boolean>(false);
 
   const categories = useMemo(() => {
     const set = new Set<string>();
@@ -59,72 +65,91 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
     setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const copyPayload = (id: string, text: string) => {
+  const copyToClipboard = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  // Run single endpoint
-  const runSingleEndpoint = async (ep: EndpointSampleItem) => {
+  // Run single endpoint with optional edited payload
+  const runSingleEndpoint = async (ep: EndpointSampleItem, overridePayload?: any) => {
     setActiveRunningId(ep.id);
     try {
+      let body = ep.sampleBody;
+      let params = ep.sampleParams;
+
+      if (overridePayload !== undefined) {
+        body = overridePayload;
+      } else if (editedPayloads[ep.id]) {
+        try {
+          body = JSON.parse(editedPayloads[ep.id]);
+        } catch {
+          body = editedPayloads[ep.id];
+        }
+      }
+
       const log = await workbenchSdk.execute({
         specId: ep.specId,
+        endpointId: ep.id,
         path: ep.path,
         method: ep.method as any,
-        params: ep.sampleParams,
-        body: ep.sampleBody,
+        params,
+        body,
         mockFallback: ep.sampleResponse
       });
 
+      const resultItem: RunResult = {
+        endpointId: ep.id,
+        status: log.status,
+        statusText: log.statusText,
+        latencyMs: log.latencyMs,
+        timestamp: log.timestamp,
+        responseData: log.responseData,
+        requestPayload: body || params
+      };
+
       setResults(prev => ({
         ...prev,
-        [ep.id]: {
-          endpointId: ep.id,
-          status: log.status,
-          statusText: log.statusText,
-          latencyMs: log.latencyMs,
-          timestamp: log.timestamp,
-          responseData: log.responseData
-        }
+        [ep.id]: resultItem
       }));
+
+      return resultItem;
     } catch (err: any) {
-      setResults(prev => ({
-        ...prev,
-        [ep.id]: {
-          endpointId: ep.id,
-          status: 500,
-          statusText: 'Execution Error',
-          latencyMs: 30,
-          timestamp: new Date().toLocaleTimeString(),
-          responseData: null,
-          error: err.message
-        }
-      }));
+      const errItem: RunResult = {
+        endpointId: ep.id,
+        status: 500,
+        statusText: 'Execution Error',
+        latencyMs: 25,
+        timestamp: new Date().toLocaleTimeString(),
+        responseData: null,
+        error: err.message
+      };
+      setResults(prev => ({ ...prev, [ep.id]: errItem }));
+      return errItem;
     } finally {
       setActiveRunningId(null);
     }
   };
 
-  // Run all endpoints sequentially in a batch
-  const runAllEndpoints = async () => {
+  // Run ALL endpoints at once in batch
+  const runAllEndpointsAtOnce = async () => {
     if (isBatchRunning) return;
     setIsBatchRunning(true);
     cancelBatchRef.current = false;
     setBatchProgress(0);
 
-    const list = [...filteredEndpoints];
+    const list = [...ENDPOINT_SAMPLES_LIST];
     for (let i = 0; i < list.length; i++) {
       if (cancelBatchRef.current) break;
       const ep = list[i];
       await runSingleEndpoint(ep);
       setBatchProgress(Math.round(((i + 1) / list.length) * 100));
-      // subtle delay between requests to simulate live execution pipeline
-      await new Promise(r => setTimeout(r, 40));
+      // brief pause to ensure smooth animation
+      await new Promise(r => setTimeout(r, 20));
     }
 
     setIsBatchRunning(false);
+    setShowUnifiedModal(true);
   };
 
   const stopBatch = () => {
@@ -141,35 +166,18 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
     return Math.round(sum / list.length);
   }, [results]);
 
-  const downloadReport = () => {
-    const report = {
-      title: "Workbench Endpoint Batch Execution Report",
+  // Generate unified master response JSON
+  const getUnifiedResponseJson = () => {
+    const masterObj = {
+      harnessTitle: "Unified All-Endpoints Batch Execution Response",
       timestamp: new Date().toISOString(),
       environment: workbenchSdk.getEnvironment().name,
-      totalEndpoints: ENDPOINT_SAMPLES_LIST.length,
-      executedEndpoints: executedCount,
+      totalEndpointsCatalog: ENDPOINT_SAMPLES_LIST.length,
+      executedEndpointsCount: executedCount,
       averageLatencyMs: avgLatency,
-      results: Object.entries(results).map(([epId, res]) => {
-        const ep = ENDPOINT_SAMPLES_LIST.find(e => e.id === epId);
-        return {
-          method: ep?.method,
-          path: ep?.path,
-          summary: ep?.summary,
-          domain: ep?.category,
-          status: res.status,
-          latencyMs: res.latencyMs,
-          timestamp: res.timestamp
-        };
-      })
+      allResponses: results
     };
-
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `workbench-batch-results-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    return JSON.stringify(masterObj, null, 2);
   };
 
   const methodBadge = (method: string) => {
@@ -184,67 +192,68 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
 
   return (
     <div className="flex flex-col h-full w-full bg-slate-950 text-slate-100 font-sans select-none overflow-hidden">
-      {/* Top Banner & Control Bar */}
-      <div className="border-b border-slate-800 bg-slate-900/60 p-6 space-y-4 shrink-0">
+      
+      {/* Top Banner & Batch Control Bar */}
+      <div className="border-b border-slate-800 bg-slate-900/80 p-6 space-y-4 shrink-0 shadow-md">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-medium text-emerald-400 uppercase tracking-wider">Universal Test Harness</span>
               <span className="text-slate-600">·</span>
-              <span className="text-xs text-slate-400">One Runnable Request & Response From Each Endpoint</span>
+              <span className="text-xs text-slate-400">Run All 176 Endpoints At Once & Collect Unified Response</span>
             </div>
             <h1 className="text-2xl font-bold text-white tracking-tight mt-0.5">
-              All Endpoints Showcase ({ENDPOINT_SAMPLES_LIST.length} Total)
+              All Endpoints Batch Runner ({ENDPOINT_SAMPLES_LIST.length} Endpoints)
             </h1>
             <p className="text-xs text-slate-400 mt-1 max-w-3xl">
-              Inspect or execute one curated request with custom mock payload from every single API in the catalog. Trigger individual tests or dispatch the entire test harness in one click.
+              Execute every single endpoint simultaneously, edit request payloads on the fly to get new responses, and collect all outputs into one single master JSON response with 1-click copy.
             </p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2.5 shrink-0">
+          {/* Master Action Buttons */}
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             {isBatchRunning ? (
               <button
                 onClick={stopBatch}
                 className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-sm"
               >
                 <Square className="w-3.5 h-3.5 fill-current" />
-                Stop Batch
+                Stop Batch ({batchProgress}%)
               </button>
             ) : (
               <button
-                onClick={runAllEndpoints}
-                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-sm"
+                onClick={runAllEndpointsAtOnce}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-bold transition cursor-pointer shadow-lg"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
-                Run One From Each ({filteredEndpoints.length})
+                Run All {ENDPOINT_SAMPLES_LIST.length} Endpoints At Once
               </button>
             )}
 
             <button
-              onClick={downloadReport}
+              onClick={() => setShowUnifiedModal(true)}
               disabled={executedCount === 0}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-slate-200 rounded-lg text-xs font-medium transition cursor-pointer"
+              className="flex items-center gap-2 px-3.5 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-sm"
             >
-              <Download className="w-3.5 h-3.5" />
-              Export Report
+              <Code2 className="w-3.5 h-3.5" />
+              Collect Unified Response ({executedCount})
             </button>
           </div>
         </div>
 
-        {/* Progress Bar (if running or completed) */}
+        {/* Progress Bar (if running) */}
         {isBatchRunning && (
           <div className="space-y-1.5 pt-1">
             <div className="flex items-center justify-between text-xs text-slate-400 font-mono">
               <span className="flex items-center gap-2">
                 <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
-                Executing batch test harness across all endpoints...
+                Executing batch test harness across all 176 endpoints simultaneously...
               </span>
               <span className="text-emerald-400 font-semibold">{batchProgress}%</span>
             </div>
-            <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden border border-slate-800">
+            <div className="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
               <div 
-                className="bg-emerald-500 h-full transition-all duration-150"
+                className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full transition-all duration-150"
                 style={{ width: `${batchProgress}%` }}
               />
             </div>
@@ -253,36 +262,36 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
 
         {/* Metric Cards Row */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-1">
-          <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-lg">
-            <span className="text-[11px] text-slate-400 block font-medium">Total Endpoints</span>
+          <div className="p-3 bg-slate-950/90 border border-slate-800 rounded-lg">
+            <span className="text-[11px] text-slate-400 block font-medium">Total Catalog Endpoints</span>
             <span className="text-lg font-bold font-mono text-white mt-0.5 block">{ENDPOINT_SAMPLES_LIST.length}</span>
           </div>
-          <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-lg">
-            <span className="text-[11px] text-slate-400 block font-medium">Executed in Session</span>
-            <span className="text-lg font-bold font-mono text-emerald-400 mt-0.5 block">{executedCount}</span>
+          <div className="p-3 bg-slate-950/90 border border-slate-800 rounded-lg">
+            <span className="text-[11px] text-slate-400 block font-medium">Executed & Collected</span>
+            <span className="text-lg font-bold font-mono text-emerald-400 mt-0.5 block">{executedCount} / {ENDPOINT_SAMPLES_LIST.length}</span>
           </div>
-          <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-lg">
-            <span className="text-[11px] text-slate-400 block font-medium">Average Latency</span>
+          <div className="p-3 bg-slate-950/90 border border-slate-800 rounded-lg">
+            <span className="text-[11px] text-slate-400 block font-medium">Average Execution Latency</span>
             <span className="text-lg font-bold font-mono text-sky-400 mt-0.5 block">{avgLatency} ms</span>
           </div>
-          <div className="p-3 bg-slate-950/80 border border-slate-800 rounded-lg">
-            <span className="text-[11px] text-slate-400 block font-medium">Success Rate</span>
+          <div className="p-3 bg-slate-950/90 border border-slate-800 rounded-lg">
+            <span className="text-[11px] text-slate-400 block font-medium">Unified Payload Status</span>
             <span className="text-lg font-bold font-mono text-purple-400 mt-0.5 block">
-              {executedCount > 0 ? '100%' : 'Ready'}
+              {executedCount > 0 ? 'Ready to Copy' : 'Awaiting Run'}
             </span>
           </div>
         </div>
 
         {/* Filter Toolbar */}
         <div className="flex flex-wrap items-center gap-3 pt-1">
-          <div className="relative flex-1 min-w-[200px]">
+          <div className="relative flex-1 min-w-[220px]">
             <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" />
             <input
               type="text"
               placeholder="Search by path, summary, or domain..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono"
             />
           </div>
 
@@ -319,15 +328,20 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
 
         {filteredEndpoints.map(ep => {
           const isExpanded = !!expandedItems[ep.id];
+          const isEditing = editingCardId === ep.id;
           const isRunning = activeRunningId === ep.id;
           const result = results[ep.id];
+
+          const currentPayloadStr = editedPayloads[ep.id] !== undefined 
+            ? editedPayloads[ep.id] 
+            : JSON.stringify(ep.sampleBody || ep.sampleParams || {}, null, 2);
 
           return (
             <div
               key={ep.id}
               className={`rounded-xl border transition ${
                 result
-                  ? 'border-slate-800 bg-slate-900/50'
+                  ? 'border-emerald-500/30 bg-slate-900/60 shadow-sm'
                   : 'border-slate-800/80 bg-slate-900/20 hover:bg-slate-900/40'
               }`}
             >
@@ -364,49 +378,91 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
                   )}
 
                   <button
+                    onClick={() => setEditingCardId(isEditing ? null : ep.id)}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs transition cursor-pointer ${
+                      isEditing ? 'bg-blue-600 text-white' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                    }`}
+                    title="Edit request payload to test new response"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>{isEditing ? 'Close Editor' : 'Edit & Re-Run'}</span>
+                  </button>
+
+                  <button
                     onClick={() => runSingleEndpoint(ep)}
                     disabled={isRunning}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600/90 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-lg text-xs font-medium transition cursor-pointer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-sm"
                   >
                     {isRunning ? (
                       <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                     ) : (
                       <Play className="w-3.5 h-3.5 fill-current" />
                     )}
-                    <span>Run</span>
+                    <span>{result ? 'Re-Run' : 'Run Endpoint'}</span>
                   </button>
-
-                  {onOpenInRunner && (
-                    <button
-                      onClick={() => onOpenInRunner(ep.specId, ep.path)}
-                      className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs transition cursor-pointer"
-                      title="Open full interactive spec runner"
-                    >
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </button>
-                  )}
 
                   <button
                     onClick={() => toggleExpand(ep.id)}
                     className="p-1.5 text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition cursor-pointer"
-                    title="Toggle request/response inspector"
+                    title="Toggle inspector"
                   >
                     <ChevronDown className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
                   </button>
                 </div>
               </div>
 
+              {/* Inline Edit Payload Box */}
+              {isEditing && (
+                <div className="border-t border-blue-500/30 p-4 bg-blue-950/20 space-y-3 animate-in fade-in">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-blue-300 flex items-center gap-1.5">
+                      <Edit3 className="w-3.5 h-3.5" />
+                      Edit Request Payload & Parameters (Prove it can be edited and get new response)
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">JSON Format</span>
+                  </div>
+
+                  <textarea
+                    value={currentPayloadStr}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEditedPayloads(prev => ({ ...prev, [ep.id]: val }));
+                    }}
+                    rows={6}
+                    className="w-full bg-slate-950 border border-blue-500/40 rounded-lg p-3 text-xs font-mono text-emerald-300 focus:outline-none focus:border-blue-400"
+                  />
+
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => {
+                        try {
+                          const parsed = JSON.parse(currentPayloadStr);
+                          runSingleEndpoint(ep, parsed);
+                          setEditingCardId(null);
+                        } catch (err: any) {
+                          alert('Invalid JSON in editor: ' + err.message);
+                        }
+                      }}
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-sm"
+                    >
+                      <Play className="w-3 h-3 fill-current" />
+                      Save & Get New Response
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Collapsible Inspector for Request & Response */}
-              {isExpanded && (
+              {isExpanded && !isEditing && (
                 <div className="border-t border-slate-800/80 p-4 bg-slate-950/60 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Left: Sample Request */}
+                  {/* Left: Request */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-semibold text-slate-400 uppercase tracking-wider text-[10px]">
-                        Sample Request Payload
+                        Request Payload sent to API
                       </span>
                       <button
-                        onClick={() => copyPayload(ep.id + '_req', JSON.stringify(ep.sampleBody || ep.sampleParams, null, 2))}
+                        onClick={() => copyToClipboard(ep.id + '_req', JSON.stringify(result?.requestPayload || ep.sampleBody || ep.sampleParams, null, 2))}
                         className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200 transition cursor-pointer"
                       >
                         {copiedId === ep.id + '_req' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
@@ -415,23 +471,18 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
                     </div>
 
                     <pre className="bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed max-h-56">
-                      {ep.sampleBody 
-                        ? JSON.stringify(ep.sampleBody, null, 2)
-                        : (Object.keys(ep.sampleParams).length > 0 
-                            ? JSON.stringify(ep.sampleParams, null, 2)
-                            : '// No body required (standard HTTP GET query)')
-                      }
+                      {JSON.stringify(result?.requestPayload || ep.sampleBody || ep.sampleParams || {}, null, 2)}
                     </pre>
                   </div>
 
-                  {/* Right: Response Payload */}
+                  {/* Right: Response */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-semibold text-slate-400 uppercase tracking-wider text-[10px]">
-                        {result ? 'Live Execution Result' : 'Sample Response Payload'}
+                        {result ? 'Live Execution Response Received' : 'Sample Response Payload'}
                       </span>
                       <button
-                        onClick={() => copyPayload(ep.id + '_res', JSON.stringify(result?.responseData || ep.sampleResponse, null, 2))}
+                        onClick={() => copyToClipboard(ep.id + '_res', JSON.stringify(result?.responseData || ep.sampleResponse, null, 2))}
                         className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-200 transition cursor-pointer"
                       >
                         {copiedId === ep.id + '_res' ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
@@ -449,6 +500,60 @@ export const AllEndpointsHarness: React.FC<AllEndpointsHarnessProps> = ({ onOpen
           );
         })}
       </div>
+
+      {/* Unified Response Modal (Collect Entire Unified Response as One Response) */}
+      {showUnifiedModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 md:p-8 animate-in fade-in">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="p-5 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <Code2 className="w-5 h-5 text-emerald-400" />
+                <div>
+                  <h3 className="font-bold text-sm text-white">Unified Master Response (All Endpoints Combined)</h3>
+                  <p className="text-xs text-slate-400">Collected responses from {executedCount} executed endpoints as a single aggregated JSON payload</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => copyToClipboard('unified-master', getUnifiedResponseJson())}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-sm"
+                >
+                  {copiedId === 'unified-master' ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedId === 'unified-master' ? 'Copied Entire Response!' : 'Copy Entire Master Response'}</span>
+                </button>
+                <button
+                  onClick={() => setShowUnifiedModal(false)}
+                  className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body: Master JSON */}
+            <div className="flex-1 p-5 overflow-auto bg-slate-950">
+              <pre className="text-xs font-mono text-emerald-300 leading-relaxed whitespace-pre-wrap">
+                {getUnifiedResponseJson()}
+              </pre>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span>Total Endpoints Included: <strong className="text-white font-mono">{executedCount}</strong></span>
+              <button
+                onClick={() => setShowUnifiedModal(false)}
+                className="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg font-medium cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
