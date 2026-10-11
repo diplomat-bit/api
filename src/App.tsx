@@ -17,6 +17,7 @@ import { GeneratedXsdViewer } from '../generated/components/GeneratedXsdViewer';
 import { ApiDocumentationPortal } from './components/ApiDocumentationPortal';
 import { AllEndpointsHarness } from './components/AllEndpointsHarness';
 import { PublicDatabaseHub } from './components/PublicDatabaseHub';
+import { FormsCenter } from './components/FormsCenter';
 import { UntitledWorkbench } from '../untitled';
 
 export default function App() {
@@ -24,8 +25,8 @@ export default function App() {
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [catalogError, setCatalogError] = useState<string | null>(null);
 
-  // Active view: 'live-db' | 'one-from-each' | 'docs' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'
-  const [activeTab, setActiveTab] = useState<'live-db' | 'one-from-each' | 'docs' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'>('live-db');
+  // Active view: 'live-db' | 'forms' | 'one-from-each' | 'docs' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'
+  const [activeTab, setActiveTab] = useState<'live-db' | 'forms' | 'one-from-each' | 'docs' | 'specs' | 'dashboard' | 'explorer' | 'schemas' | 'json' | 'logs'>('live-db');
   
   // Selected Spec
   const [selectedSpecId, setSelectedSpecId] = useState<string>('access-online-transactions-and-orders');
@@ -170,6 +171,18 @@ export default function App() {
             </button>
 
             <button
+              onClick={() => setActiveTab('forms')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                activeTab === 'forms'
+                  ? 'bg-blue-600 text-white shadow-md ring-1 ring-blue-400'
+                  : 'text-blue-300 hover:text-white hover:bg-blue-950/60 border border-blue-800/60'
+              }`}
+            >
+              <FileCode className="w-3.5 h-3.5 text-blue-400" />
+              Corporate Forms (142)
+            </button>
+
+            <button
               onClick={() => setActiveTab('one-from-each')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
                 activeTab === 'one-from-each'
@@ -303,6 +316,13 @@ export default function App() {
         {activeTab === 'live-db' && (
           <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
             <PublicDatabaseHub />
+          </div>
+        )}
+
+        {/* Corporate Forms Center */}
+        {activeTab === 'forms' && (
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+            <FormsCenter />
           </div>
         )}
 

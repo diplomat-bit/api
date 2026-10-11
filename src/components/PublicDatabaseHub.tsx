@@ -6,6 +6,7 @@ import {
   Sliders, Shield, Zap, Activity, CheckCircle2, AlertCircle, 
   FileText, CornerDownRight, Sparkles, Filter, X, Edit3
 } from 'lucide-react';
+import { workbenchSdk } from '../../generated/configs/api-clients';
 
 interface CollectionStats {
   name: string;
@@ -27,6 +28,14 @@ export function PublicDatabaseHub() {
   const [activeSubTab, setActiveSubTab] = useState<'browser' | 'caller' | 'reference' | 'stream'>('browser');
   const [selectedCollection, setSelectedCollection] = useState<string>('transactions');
   
+  // Api Host configuration
+  const [apiHost, setApiHostState] = useState<string>(workbenchSdk.getApiHost());
+
+  const handleApiHostChange = (newHost: string) => {
+    setApiHostState(newHost);
+    workbenchSdk.setApiHost(newHost);
+  };
+
   // Data state
   const [items, setItems] = useState<any[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
@@ -64,12 +73,15 @@ export function PublicDatabaseHub() {
   const [apiLoading, setApiLoading] = useState<boolean>(false);
 
   // Host URL for external callers
-  const originUrl = typeof window !== 'undefined' ? window.location.origin : 'https://api.yourdomain.com';
+  const originUrl = useMemo(() => {
+    if (apiHost) return apiHost;
+    return typeof window !== 'undefined' ? window.location.origin : 'https://api-fakc.onrender.com';
+  }, [apiHost]);
 
   // Fetch Database Stats
   const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch('/api/db/stats');
+      const res = await fetch(`${apiHost}/api/db/stats`);
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -77,7 +89,7 @@ export function PublicDatabaseHub() {
     } catch (e) {
       console.error('Failed to fetch DB stats:', e);
     }
-  }, []);
+  }, [apiHost]);
 
   // Fetch Collection Data
   const fetchData = useCallback(async () => {
@@ -92,7 +104,7 @@ export function PublicDatabaseHub() {
       params.set('sort', sortField);
       params.set('order', sortOrder);
 
-      const res = await fetch(`/api/db/${selectedCollection}?${params.toString()}`);
+      const res = await fetch(`${apiHost}/api/db/${selectedCollection}?${params.toString()}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to load collection '${selectedCollection}'`);
       
       const json = await res.json();
@@ -104,7 +116,7 @@ export function PublicDatabaseHub() {
     } finally {
       setLoading(false);
     }
-  }, [selectedCollection, searchQuery, statusFilter, currentPage, pageSize, sortField, sortOrder]);
+  }, [selectedCollection, searchQuery, statusFilter, currentPage, pageSize, sortField, sortOrder, apiHost]);
 
   useEffect(() => {
     fetchStats();
@@ -116,7 +128,7 @@ export function PublicDatabaseHub() {
     setStretching(true);
     setStretchMessage(null);
     try {
-      const res = await fetch('/api/db/stretch', {
+      const res = await fetch(`${apiHost}/api/db/stretch`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ count, collection: targetCollection })
@@ -139,7 +151,7 @@ export function PublicDatabaseHub() {
   const handleReset = async () => {
     if (!confirm('Reset database to default seed data? All custom additions will revert to standard state.')) return;
     try {
-      const res = await fetch('/api/db/reset', { method: 'POST' });
+      const res = await fetch(`${apiHost}/api/db/reset`, { method: 'POST' });
       const data = await res.json();
       setStretchMessage(data.message);
       fetchStats();
@@ -154,7 +166,7 @@ export function PublicDatabaseHub() {
   const handleDeleteItem = async (id: string) => {
     if (!confirm(`Delete record '${id}' from '${selectedCollection}'?`)) return;
     try {
-      const res = await fetch(`/api/db/${selectedCollection}/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${apiHost}/api/db/${selectedCollection}/${id}`, { method: 'DELETE' });
       if (res.ok) {
         if (inspectedRecord?.id === id) setInspectedRecord(null);
         fetchStats();
@@ -169,7 +181,7 @@ export function PublicDatabaseHub() {
   const handleCreateRecord = async () => {
     try {
       const parsed = JSON.parse(newRecordJson);
-      const res = await fetch(`/api/db/${selectedCollection}`, {
+      const res = await fetch(`${apiHost}/api/db/${selectedCollection}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(parsed)
@@ -197,7 +209,8 @@ export function PublicDatabaseHub() {
       if (['POST', 'PUT'].includes(reqMethod) && reqBody) {
         fetchOpts.body = reqBody;
       }
-      const res = await fetch(reqUrl, fetchOpts);
+      const targetUrl = reqUrl.startsWith('http') ? reqUrl : `${apiHost}${reqUrl}`;
+      const res = await fetch(targetUrl, fetchOpts);
       const duration = Math.round(performance.now() - start);
       setApiRespStatus(res.status);
       setApiRespTime(duration);
@@ -258,6 +271,32 @@ export function PublicDatabaseHub() {
             <p className="text-xs md:text-sm text-slate-400 max-w-3xl">
               Real persistent backend storage with open access. Anyone can call the API via REST/cURL, execute endpoints, stretch collections, or retrieve live records.
             </p>
+
+            {/* Backend Server Target Config */}
+            <div className="flex flex-wrap items-center gap-2 mt-3 bg-slate-900/60 border border-slate-800 rounded-lg p-1.5 w-fit">
+              <span className="text-[10px] font-mono text-slate-400 font-semibold px-2">TARGET BACKEND API:</span>
+              <button
+                onClick={() => handleApiHostChange('')}
+                className={`px-2.5 py-1 rounded text-[11px] font-mono font-medium transition cursor-pointer ${
+                  apiHost === ''
+                    ? 'bg-blue-600 text-white font-bold shadow-sm'
+                    : 'bg-slate-950 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                Local Dev Server
+              </button>
+              <button
+                onClick={() => handleApiHostChange('https://api-fakc.onrender.com')}
+                className={`px-2.5 py-1 rounded text-[11px] font-mono font-medium transition cursor-pointer flex items-center gap-1 ${
+                  apiHost === 'https://api-fakc.onrender.com'
+                    ? 'bg-blue-600 text-white font-bold shadow-sm'
+                    : 'bg-slate-950 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Server className="w-3 h-3 text-emerald-400" />
+                Render Live Server (api-fakc.onrender.com)
+              </button>
+            </div>
           </div>
 
           {/* Quick Metrics & Actions */}

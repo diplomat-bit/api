@@ -17,9 +17,22 @@ class WorkbenchSdkClient {
   private activeEnvironment: EnvironmentConfig = DEFAULT_ENVIRONMENTS.sandbox;
   private history: ExecutionLog[] = [];
   private listeners: Array<() => void> = [];
+  private apiHost: string = typeof localStorage !== 'undefined' ? localStorage.getItem('WORKBENCH_API_HOST') || '' : '';
 
   constructor() {
     // initialize
+  }
+
+  public setApiHost(host: string) {
+    this.apiHost = host;
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('WORKBENCH_API_HOST', host);
+    }
+    this.notify();
+  }
+
+  public getApiHost(): string {
+    return this.apiHost;
   }
 
   public setEnvironment(env: EnvironmentConfig | string) {
@@ -101,7 +114,7 @@ class WorkbenchSdkClient {
 
     try {
       // Execute through our backend public API Gateway & Database
-      const apiRes = await fetch('/api/execute', {
+      const apiRes = await fetch(`${this.apiHost}/api/execute`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
